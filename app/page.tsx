@@ -23,7 +23,8 @@ export default function Home() {
             <p className="justify-items-end text-dark-600 xl:text-left">
               © 2024 MediCare
             </p>
-            <Link href="/?admin=true" className="text-green-500">
+            {/* //! Customize link color green to blue */}
+            <Link href="/?admin=true" className="text-blue-500">
               Admin
             </Link>
           </div>
