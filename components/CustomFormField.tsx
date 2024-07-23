@@ -13,9 +13,11 @@ import { FormFieldType } from "./forms/PatientForm";
 import Image from "next/image";
 import "react-phone-number-input/style.css";
 import PhoneInput from "react-phone-number-input";
+import { Textarea } from "./ui/textarea";
+import { Select, SelectContent, SelectTrigger, SelectValue } from "./ui/select";
 // ! Uncomment this two import below
-// import DatePicker from "react-datepicker";
-// import "react-datepicker/dist/react-datepicker.css";
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
 
 interface CustomProps {
   control: Control<any>;
@@ -69,7 +71,7 @@ const RenderField = ({ field, props }: { field: any; props: CustomProps }) => {
         <FormControl>
           <Textarea
             placeholder={placeholder}
-            {...filed}
+            {...field}
             className="shad-textArea"
             disabled={props.disabled}
           />
@@ -83,7 +85,11 @@ const RenderField = ({ field, props }: { field: any; props: CustomProps }) => {
             placeholder={placeholder}
             international
             withCountryCode
-            value={field.value as number | undefined}
+            value={
+              typeof field.value === "number"
+                ? field.value.toString()
+                : field.value
+            }
             onChange={field.onChange}
             className="input-phone"
           />
@@ -132,7 +138,7 @@ const RenderField = ({ field, props }: { field: any; props: CustomProps }) => {
       break;
   }
 };
-const CustomeFormField = (props: CustomProps) => {
+const CustomFormField = (props: CustomProps) => {
   const { control, fieldType, name, label } = props;
   return (
     <div>
@@ -153,4 +159,4 @@ const CustomeFormField = (props: CustomProps) => {
   );
 };
 
-export default CustomeFormField;
+export default CustomFormField;

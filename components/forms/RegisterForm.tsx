@@ -17,6 +17,8 @@ import { createUser } from "@/lib/actions/patient.actions";
 import { GenderOptions } from "@/constants";
 import { Label } from "../ui/label";
 import Image from "next/image";
+import { SelectItem } from "../ui/select";
+import { RadioGroup, RadioGroupItem } from "../ui/radio-group";
 // import CustomeFormField from "../CustomeFormField";
 export enum FormFieldType {
   INPUT = "input",
@@ -119,7 +121,7 @@ const RegisterForm = ({ user }: { user: User }) => {
                 <RadioGroup
                   className="flex h-11 gap-6 xl:justify-between"
                   onValueChange={field.onChange}
-                  defaultValues={field.value}
+                  defaultValue={field.value}
                 >
                   {GenderOptions.map((option) => (
                     <div key={option} className="radio-group">
