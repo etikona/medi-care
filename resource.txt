@@ -1,0 +1,4 @@
+ 1 Radio Group = npx shadcn-ui@latest add radio-group
+ 2 SELECT = npx shadcn-ui@latest add select 
+ 2 Text Area = npx shadcn-ui@latest add textarea 
+ 3 React Date Picker = npm install react-datepicker --save

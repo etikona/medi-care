@@ -13,6 +13,7 @@ import SubmitButton from "../SubmitButton";
 import { useState } from "react";
 import { UserFormValidation } from "@/lib/validation";
 import { useRouter } from "next/navigation";
+import { createUser } from "@/lib/actions/patient.actions";
 // import CustomeFormField from "../CustomeFormField";
 export enum FormFieldType {
   INPUT = "input",
@@ -43,13 +44,13 @@ const PatientForm = () => {
   }: z.infer<typeof UserFormValidation>) {
     setIsLoading(true);
     try {
-      // const userData = {
-      //   name,
-      //   email,
-      //   phone,
-      // };
-      // const user = await createUser(userDate);
-      // if(user) router.push(`/patients/${user.$id}/register`)
+      const userData = {
+        name,
+        email,
+        phone,
+      };
+      const user = await createUser(userData);
+      if (user) router.push(`/patients/${user.$id}/register`);
     } catch (error) {
       console.log(error);
     }
