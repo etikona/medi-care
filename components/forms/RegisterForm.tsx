@@ -14,11 +14,12 @@ import { useState } from "react";
 import { UserFormValidation } from "@/lib/validation";
 import { useRouter } from "next/navigation";
 import { createUser } from "@/lib/actions/patient.actions";
-import { GenderOptions } from "@/constants";
+import { Doctors, GenderOptions, IdentificationTypes } from "@/constants";
 import { Label } from "../ui/label";
 import Image from "next/image";
 import { SelectItem } from "../ui/select";
 import { RadioGroup, RadioGroupItem } from "../ui/radio-group";
+import FileUploader from "../FileUploader";
 // import CustomeFormField from "../CustomeFormField";
 export enum FormFieldType {
   INPUT = "input",
@@ -186,16 +187,16 @@ const RegisterForm = ({ user }: { user: User }) => {
             {/* // * {['Dr.John Doe', 'Dr.Johnathon', 'Dr.Martinez', 'Dr.Murphy']} */}
             {Doctors.map((doctor) => (
               //! key=doctor.name value=doctor.name
-              <SelectItem key={doctor.name} value={doctor.name}>
+              <SelectItem key={doctor?.name} value={doctor?.name}>
                 <div className="flex cursor-pointer items-center gap-2">
                   <Image
-                    src={doctor.image}
+                    src={doctor?.image}
                     height={32}
                     width={32}
-                    alt={doctor.name}
+                    alt={doctor?.name}
                     className="rounded-full border border-dark-500"
                   />
-                  <p>{doctor.name}</p>
+                  <p>{doctor?.name}</p>
                 </div>
               </SelectItem>
             ))}
@@ -249,6 +250,45 @@ const RegisterForm = ({ user }: { user: User }) => {
             placeholder="Fever"
           />
         </div>
+        <section className="space-y-6">
+          <div className="mb-9 space-y-1">
+            <h2 className="sub-header">Identification and Verification</h2>
+          </div>
+        </section>
+        <CustomFormField
+          fieldType={FormFieldType.SELECT}
+          control={form.control}
+          name="identificationType"
+          label="Identification type"
+          placeholder="Select an identification type"
+        >
+          {/* // ! Copy the constant file from git repo for loading all the Identification Types */}
+          {/* // * {['Dr.John Doe', 'Dr.Johnathon', 'Dr.Martinez', 'Dr.Murphy']} */}
+          {IdentificationTypes.map((type) => (
+            //! key=doctor.name value=doctor.name
+            <SelectItem key={type} value={type}>
+              {type}
+            </SelectItem>
+          ))}
+        </CustomFormField>
+        <CustomFormField
+          fieldType={FormFieldType.INPUT}
+          control={form.control}
+          name="IdentificationNumber"
+          label="Identification number"
+          placeholder="73465889"
+        />
+        <CustomFormField
+          fieldType={FormFieldType.SKELETON}
+          control={form.control}
+          name="identificationDocument"
+          label="Scanned copy of identification document"
+          renderSkeleton={(field) => (
+            <FormControl>
+              <FileUploader files={field.value} onChange={field.onChange} />
+            </FormControl>
+          )}
+        />
         <SubmitButton isLoading={isLoading}> GET STARTED </SubmitButton>
       </form>
     </Form>

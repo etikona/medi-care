@@ -5,3 +5,5 @@ export const Doctors = [
   "Dr.Martinez",
   "Dr.Murphy",
 ];
+
+export const IdentificationTypes = ["Skin", "Hair", "Eye", "Bone", "Heart"];

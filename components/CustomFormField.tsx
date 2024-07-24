@@ -18,7 +18,7 @@ import { Select, SelectContent, SelectTrigger, SelectValue } from "./ui/select";
 // ! Uncomment this two import below
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
-
+import calender from "@/public/assets/icons/calendar.svg";
 interface CustomProps {
   control: Control<any>;
   fieldType: FormFieldType;
@@ -99,7 +99,7 @@ const RenderField = ({ field, props }: { field: any; props: CustomProps }) => {
       return (
         <div className="flex rounded-md border border-dark-500 bg-dark-400">
           <Image
-            src="/assets/icons/calender.svg"
+            src={calender}
             height={24}
             width={24}
             alt="calender"
