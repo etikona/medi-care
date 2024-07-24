@@ -3,3 +3,4 @@
  2 Text Area = npx shadcn-ui@latest add textarea 
  3 React Date Picker = npm install react-datepicker --save
  4 Have to copy the constant file from Github
+ 5 Have to copy the validation file from Github
