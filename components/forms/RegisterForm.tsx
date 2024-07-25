@@ -53,10 +53,10 @@ const RegisterForm = ({ user }: { user: User }) => {
     setIsLoading(true);
     let formData;
     if (
-      values.identificationDocument &&
-      values.identificationDocument.length > 0
+      values?.identificationDocument &&
+      values?.identificationDocument.length > 0
     ) {
-      const blobFile = new Blob([values.identificationNumber[0]], {
+      const blobFile = new Blob([values?.identificationNumber[0]], {
         type: values.identificationDocument[0].type,
       });
       formData = new FormData();
@@ -64,8 +64,16 @@ const RegisterForm = ({ user }: { user: User }) => {
       formData.append("fileName", values.identificationDocument[0].name);
     }
     try {
-      // const user = await createUser(userData);
-      // if (user) router.push(`/patients/${user.$id}/register`);
+      const patientData = {
+        ...values,
+        userId: user.$id,
+        birthDate: new Date(values.birthDate),
+        identificationDocument: formData,
+      };
+      const patient = await registerPatient(patientData);
+      if (patient) {
+        router.push(`/patients/${user.$id}/new-appointment`);
+      }
     } catch (error) {
       console.log(error);
     }
@@ -283,7 +291,7 @@ const RegisterForm = ({ user }: { user: User }) => {
         <CustomFormField
           fieldType={FormFieldType.INPUT}
           control={form.control}
-          name="IdentificationNumber"
+          name="identificationNumber"
           label="Identification number"
           placeholder="73465889"
         />
