@@ -33,9 +33,9 @@ declare interface RegisterUserParams extends CreateUserParams {
   currentMedication: string | undefined;
   familyMedicalHistory: string | undefined;
   pastMedicalHistory: string | undefined;
-  indentificationType: string | undefined;
-  indetificationNumber: string | undefined;
-  indetificationDocument: FormData | undefined;
+  identificationType: string | undefined;
+  identificationNumber: string | undefined;
+  identificationDocument: FormData | undefined;
   privacyConsent: boolean;
 }
 

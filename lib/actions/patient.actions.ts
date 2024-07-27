@@ -1,5 +1,5 @@
 import { ID, Query } from "node-appwrite";
-import { users } from "../appwrite.config";
+import { BUCKET_ID, storage, users } from "../appwrite.config";
 import { parseStringify } from "../utils";
 import { InputFile } from "node-appwrite/file";
 export const createUser = async (user: CreateUserParams) => {
@@ -39,6 +39,7 @@ export const registerPatient = async ({
         identificationDocument?.get("blobFile") as Blob,
         identificationDocument?.get("fileName") as string
       );
+      file = await storage.createFile(BUCKET_ID!, ID.unique(), inputFile);
     }
   } catch (error) {
     console.log(error);
