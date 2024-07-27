@@ -1,5 +1,12 @@
 import { ID, Query } from "node-appwrite";
-import { BUCKET_ID, storage, users } from "../appwrite.config";
+import {
+  BUCKET_ID,
+  DATABASE_ID,
+  databases,
+  PATIENT_COLLECTION_ID,
+  storage,
+  users,
+} from "../appwrite.config";
 import { parseStringify } from "../utils";
 import { InputFile } from "node-appwrite/file";
 export const createUser = async (user: CreateUserParams) => {
@@ -40,6 +47,16 @@ export const registerPatient = async ({
         identificationDocument?.get("fileName") as string
       );
       file = await storage.createFile(BUCKET_ID!, ID.unique(), inputFile);
+
+      const patient = await databases.createDocument(
+        DATABASE_ID!,
+        PATIENT_COLLECTION_ID!,
+        ID.unique(),
+        {
+          identificationDocumentId: file?.$id || null,
+          identificationDocumentUrl: ``,
+        }
+      );
     }
   } catch (error) {
     console.log(error);
