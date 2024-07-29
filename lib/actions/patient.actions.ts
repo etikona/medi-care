@@ -36,6 +36,18 @@ export const getUser = async (userId: string) => {
     console.log(error);
   }
 };
+export const getPatient = async (userId: string) => {
+  try {
+    const patients = await databases.listDocuments(
+      DATABASE_ID!,
+      PATIENT_COLLECTION_ID!,
+      [Query.equal("$userId", userId)]
+    );
+    return parseStringify(patients.documents[0]);
+  } catch (error) {
+    console.log(error);
+  }
+};
 
 export const registerPatient = async ({
   identificationDocument,
@@ -57,8 +69,10 @@ export const registerPatient = async ({
         {
           identificationDocumentId: file?.$id || null,
           identificationDocumentUrl: `${ENDPOINT}/storage/buckets/${BUCKET_ID}/files/${file?.$id}/view? project=${PROJECT_ID}`,
+          ...patient,
         }
       );
+      return parseStringify(newPatient);
     }
   } catch (error) {
     console.log(error);

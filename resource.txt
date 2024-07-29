@@ -4,3 +4,8 @@
  3 React Date Picker = npm install react-datepicker --save
  4 Have to copy the constant file from Github
  5 Have to copy the validation file from Github
+ 6 Fix the identification document url in database , it's should be change 100 to 1000.
+ 7 Fix the Primary Physician in database.
+ 8 Fix the identification number in database.
+ 9 Add a new attributes called treatment consent & discloser consent  in database.
+ 10 Git Commit = "Create new appointment page & form"
