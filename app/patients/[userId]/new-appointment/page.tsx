@@ -24,16 +24,16 @@ const NewAppointment = async ({ params: { userId } }: SearchParamProps) => {
           <AppointmentForm
             type="create"
             userId={userId}
-            patientId={patient.$id}
+            patientId={patient?.$id}
           />
+          <p className="copyright mt-10 py-12">© 2024 MediCare</p>
         </div>
       </section>
       <Image
         src={appointment}
         alt="patient"
-        className="side-img max-w-[390px] bg-bottom"
+        className="side-img max-w-[390px]"
       />
-      <p className="copyright mt-10 py-12">© 2024 MediCare</p>
     </div>
   );
 };
