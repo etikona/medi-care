@@ -6,6 +6,7 @@ import cancel from "@/public/assets/icons/cancelled.svg";
 import Image from "next/image";
 import StatCard from "@/components/StatCard";
 import { getRecentAppointmentList } from "@/lib/actions/appointment.actions";
+import DataTable from "@/components/DataTable";
 
 const Admin = async () => {
   const appointments = await getRecentAppointmentList();
@@ -51,6 +52,7 @@ const Admin = async () => {
             label="Cancel Appointment"
             icon={cancel}
           />
+          <DataTable />
         </section>
       </main>
     </div>
