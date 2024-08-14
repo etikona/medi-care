@@ -6,11 +6,30 @@ import cancel from "@/public/assets/icons/cancelled.svg";
 import Image from "next/image";
 import StatCard from "@/components/StatCard";
 import { getRecentAppointmentList } from "@/lib/actions/appointment.actions";
-import DataTable from "@/components/DataTable";
+import { DataTable } from "@/components/table/DataTable";
+import { columns, Payment } from "@/components/table/columns";
+// import DataTable from "@/components/table/DataTable";
+// import { columns } from "@/components/table/columns";
+async function getData(): Promise<Payment[]> {
+  return [
+    {
+      id: "728ed52f",
+      amount: 100,
+      status: "pending",
+      email: "m@example.com",
+    },
+  ];
+}
 
 const Admin = async () => {
+  const data = await getData();
   const appointments = await getRecentAppointmentList();
-  console.log(appointments);
+  console.table(appointments);
+
+  if (!appointments) {
+    return <div>Error loading appointments.</div>; // Handle case where appointments data is null or undefined
+  }
+
   return (
     <div className="mx-auto flex max-w-7xl flex-col space-y-14">
       <header className="admin-header">
@@ -30,30 +49,31 @@ const Admin = async () => {
         <section className="w-full space-y-4">
           <h1>Welcome 👋</h1>
           <p className="text-dark-700">
-            Start the day with managing new appointment
+            Start the day with managing new appointments
           </p>
         </section>
         <section className="admin-stat">
           <StatCard
             type="appointments"
-            count={appointments}
+            count={appointments.scheduleCount} // Schedule Appointment count
             label="Schedule Appointment"
             icon={appointmentIcon}
           />
           <StatCard
             type="pending"
-            count={appointments}
+            count={appointments.pendingCount} // Pending Appointment count
             label="Pending Appointment"
             icon={pending}
           />
           <StatCard
             type="cancel"
-            count={appointments}
+            count={appointments.cancelCount} // Cancelled Appointment count
             label="Cancel Appointment"
             icon={cancel}
           />
-          <DataTable />
         </section>
+        {/* <DataTable columns={columns} data={appointments.documents} /> */}
+        <DataTable columns={columns} data={data} />
       </main>
     </div>
   );
