@@ -10,85 +10,8 @@ import { DataTable } from "@/components/table/DataTable";
 import { columns, Payment } from "@/components/table/columns";
 // import DataTable from "@/components/table/DataTable";
 // import { columns } from "@/components/table/columns";
-async function getData(): Promise<Payment[]> {
-  return [
-    {
-      id: "728ed52f",
-      amount: 100,
-      status: "pending",
-      email: "m@example.com",
-    },
-    {
-      id: "728ed52f",
-      amount: 100,
-      status: "pending",
-      email: "m@example.com",
-    },
-    {
-      id: "728ed52f",
-      amount: 100,
-      status: "pending",
-      email: "m@example.com",
-    },
-    {
-      id: "728ed52f",
-      amount: 100,
-      status: "pending",
-      email: "m@example.com",
-    },
-    {
-      id: "728ed52f",
-      amount: 100,
-      status: "pending",
-      email: "m@example.com",
-    },
-    {
-      id: "728ed52f",
-      amount: 100,
-      status: "pending",
-      email: "m@example.com",
-    },
-    {
-      id: "728ed52f",
-      amount: 100,
-      status: "pending",
-      email: "m@example.com",
-    },
-    {
-      id: "728ed52f",
-      amount: 100,
-      status: "pending",
-      email: "m@example.com",
-    },
-    {
-      id: "728ed52f",
-      amount: 100,
-      status: "pending",
-      email: "m@example.com",
-    },
-    {
-      id: "728ed52f",
-      amount: 100,
-      status: "pending",
-      email: "m@example.com",
-    },
-    {
-      id: "728ed52f",
-      amount: 100,
-      status: "pending",
-      email: "m@example.com",
-    },
-    {
-      id: "728ed52f",
-      amount: 100,
-      status: "pending",
-      email: "m@example.com",
-    },
-  ];
-}
 
 const Admin = async () => {
-  const data = await getData();
   const appointments = await getRecentAppointmentList();
   console.table(appointments);
 
@@ -138,8 +61,7 @@ const Admin = async () => {
             icon={cancel}
           />
         </section>
-        {/* <DataTable columns={columns} data={appointments.documents} /> */}
-        <DataTable columns={columns} data={data} />
+        <DataTable columns={columns} data={appointments.documents} />
       </main>
     </div>
   );
