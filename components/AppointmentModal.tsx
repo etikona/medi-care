@@ -9,8 +9,19 @@ import {
 } from "@/components/ui/dialog";
 import { useState } from "react";
 import { Button } from "./ui/button";
+import { Appointment } from "@/types/appwrite.types";
 
-const AppointmentModal = ({ type }: { type: "schedule" | "cancel" }) => {
+const AppointmentModal = ({
+  type,
+  patientId,
+  userId,
+  appointment,
+}: {
+  type: "schedule" | "cancel";
+  patientId: string;
+  userId: string;
+  appointment: Appointment;
+}) => {
   const [open, setOpen] = useState(false);
   return (
     <div>

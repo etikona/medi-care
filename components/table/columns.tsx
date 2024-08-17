@@ -103,7 +103,7 @@ export const columns: ColumnDef<Payment>[] = [
             userId={data.userId}
             appointmentId={data}
             title="cancel Appointment"
-            description="Please confirm the following details to cancel"
+            description="Are you sure you want to cancel this appointment?"
           />
         </div>
       );
