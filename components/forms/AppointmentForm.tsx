@@ -19,7 +19,11 @@ import { FormFieldType } from "./PatientForm";
 import { Doctors } from "@/constants";
 import { SelectItem } from "../ui/select";
 import Image from "next/image";
-import { createAppointment } from "@/lib/actions/appointment.actions";
+import {
+  createAppointment,
+  updateAppointment,
+} from "@/lib/actions/appointment.actions";
+import { Appointment } from "@/types/appwrite.types";
 // import { error } from "console";
 // import CustomeFormField from "../CustomeFormField";
 
@@ -27,10 +31,14 @@ const AppointmentForm = ({
   userId,
   patientId,
   type,
+  appointment,
+  setOpen,
 }: {
   userId: string;
   patientId: string;
   type: "create" | "cancel" | "schedule";
+  appointment?: Appointment;
+  setOpen: (open: boolean) => void;
 }) => {
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
@@ -48,50 +56,68 @@ const AppointmentForm = ({
     },
   });
 
-  async function onSubmit({
-    values,
-  }: z.infer<typeof AppointmentFormValidation>) {
+  const onSubmit = async (
+    values: z.infer<typeof AppointmentFormValidation>
+  ) => {
     setIsLoading(true);
 
     let status;
     switch (type) {
       case "schedule":
-        status = "Scheduled";
+        status = "scheduled";
         break;
       case "cancel":
-        status = "Cancelled";
+        status = "cancelled";
         break;
-
       default:
-        status = "Pending";
-        break;
+        status = "pending";
     }
+
     try {
       if (type === "create" && patientId) {
-        const appointmentDate = {
+        const appointment = {
           userId,
           patient: patientId,
           primaryPhysician: values.primaryPhysician,
           schedule: new Date(values.schedule),
           reason: values.reason!,
-          note: values.notes,
           status: status as Status,
+          note: values.note,
         };
 
-        const appointment = await createAppointment(appointmentDate);
+        const newAppointment = await createAppointment(appointment);
 
-        if (appointment) {
+        if (newAppointment) {
           form.reset();
           router.push(
-            `/patients/${userId}/new-appointment/success?appointmentId=${appointment.$id}`
+            `/patients/${userId}/new-appointment/success?appointmentId=${newAppointment.$id}`
           );
+        }
+      } else {
+        const appointmentToUpdate = {
+          userId,
+          appointmentId: appointment?.$id!,
+          appointment: {
+            primaryPhysician: values.primaryPhysician,
+            schedule: new Date(values.schedule),
+            status: status as Status,
+            cancellationReason: values.cancellationReason,
+          },
+          type,
+        };
+
+        const updatedAppointment = await updateAppointment(appointmentToUpdate);
+
+        if (updatedAppointment) {
+          setOpen && setOpen(false);
+          form.reset();
         }
       }
     } catch (error) {
       console.log(error);
-      setIsLoading(false);
     }
-  }
+    setIsLoading(false);
+  };
 
   let buttonLabel;
   switch (type) {

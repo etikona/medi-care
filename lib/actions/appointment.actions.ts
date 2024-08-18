@@ -91,7 +91,7 @@ export const updateAppointment = async ({
     if (!updateAppointment) {
       throw new Error("Appointment doesn't update");
     }
-    // * SMS Service
+    // TODO SMS Notification
     revalidatePath("./admin");
     return parseStringify(updateAppointment);
   } catch (error) {}
