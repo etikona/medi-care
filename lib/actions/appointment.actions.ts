@@ -7,6 +7,7 @@ import {
 } from "../appwrite.config";
 import { parseStringify } from "../utils";
 import { Appointment } from "@/types/appwrite.types";
+import { revalidatePath } from "next/cache";
 
 export const createAppointment = async (
   appointment: CreateAppointmentParams
@@ -72,4 +73,26 @@ export const getRecentAppointmentList = async () => {
   } catch (error) {
     console.log(error);
   }
+};
+
+export const updateAppointment = async ({
+  appointmentId,
+  userId,
+  appointment,
+  type,
+}: UpdateAppointmentParams) => {
+  try {
+    const updateAppointment = await databases.updateDocument(
+      DATABASE_ID!,
+      APPOINTMENT_COLLECTION_ID!,
+      appointmentId,
+      appointment
+    );
+    if (!updateAppointment) {
+      throw new Error("Appointment doesn't update");
+    }
+    // * SMS Service
+    revalidatePath("./admin");
+    return parseStringify(updateAppointment);
+  } catch (error) {}
 };
