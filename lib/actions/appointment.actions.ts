@@ -6,7 +6,7 @@ import {
   databases,
   messaging,
 } from "../appwrite.config";
-import { parseStringify } from "../utils";
+import { formatDateTime, parseStringify } from "../utils";
 import { Appointment } from "@/types/appwrite.types";
 import { revalidatePath } from "next/cache";
 
@@ -93,6 +93,16 @@ export const updateAppointment = async ({
       throw new Error("Appointment doesn't update");
     }
     // TODO SMS Notification
+    const smsMessage = `Hi, It's Medi Care.
+    ${
+      type === "Schedule"
+        ? `Your appointment has been scheduled for ${formatDateTime(
+            appointment.schedule!
+          )}`
+        : `We regret to inform you that your appointment has been cancelled. Reason ${appointment.cancellationReason}`
+    }
+    `;
+    await sendSMSNotification(userId, smsMessage);
     revalidatePath("./admin");
     return parseStringify(updateAppointment);
   } catch (error) {}
