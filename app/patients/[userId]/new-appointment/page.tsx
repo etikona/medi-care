@@ -26,6 +26,9 @@ const NewAppointment = async ({ params: { userId } }: SearchParamProps) => {
             type="create"
             userId={userId}
             patientId={patient?.$id}
+            setOpen={function (open: boolean): void {
+              throw new Error("Function not implemented.");
+            }}
           />
           <p className="copyright mt-10 py-12">© 2024 MediCare</p>
         </div>
