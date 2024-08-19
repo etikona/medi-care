@@ -96,9 +96,9 @@ export const updateAppointment = async ({
     const smsMessage = `Hi, It's Medi Care.
     ${
       type === "Schedule"
-        ? `Your appointment has been scheduled for ${formatDateTime(
-            appointment.schedule!
-          )}`
+        ? `Your appointment has been scheduled for ${
+            formatDateTime(appointment.schedule!).dateTime
+          } with Dr. ${appointment.primaryPhysician}`
         : `We regret to inform you that your appointment has been cancelled. Reason ${appointment.cancellationReason}`
     }
     `;
