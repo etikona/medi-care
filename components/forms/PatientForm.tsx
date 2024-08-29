@@ -30,6 +30,7 @@ export enum FormFieldType {
 const PatientForm = () => {
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
+
   const form = useForm<z.infer<typeof UserFormValidation>>({
     resolver: zodResolver(UserFormValidation),
     defaultValues: {
@@ -45,7 +46,9 @@ const PatientForm = () => {
     phone,
   }: z.infer<typeof UserFormValidation>) {
     setIsLoading(true);
+
     try {
+      //! First change
       const userData = {
         name,
         email,
@@ -54,12 +57,12 @@ const PatientForm = () => {
       const user = await createUser(userData);
       if (user) {
         console.log("User created successfully", user);
+        router.push(`/patients/${user.$id}/register`);
       }
-      if (user) router.push(`/patients/${user.$id}/register`);
     } catch (error) {
       console.log(error);
-      setIsLoading(false);
     }
+    setIsLoading(false);
   }
   return (
     <Form {...form}>
@@ -89,7 +92,7 @@ const PatientForm = () => {
         <CustomFormField
           fieldType={FormFieldType.PHONE_INPUT}
           control={form.control}
-          name="Phone"
+          name="phone"
           label="Phone Number"
           placeholder="+8801289345"
         />

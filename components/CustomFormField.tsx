@@ -9,7 +9,7 @@ import {
 } from "@/components/ui/form";
 import { Control } from "react-hook-form";
 import { Input } from "@/components/ui/input";
-import { FormFieldType } from "./forms/PatientForm";
+// import { FormFieldType } from "./forms/PatientForm";
 import Image from "next/image";
 import "react-phone-number-input/style.css";
 import PhoneInput from "react-phone-number-input";
@@ -20,6 +20,8 @@ import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import calender from "@/public/assets/icons/calendar.svg";
 import { Checkbox } from "./ui/checkbox";
+import { FormFieldType } from "./forms/PatientForm";
+
 interface CustomProps {
   control: Control<any>;
   fieldType: FormFieldType;

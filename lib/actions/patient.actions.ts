@@ -17,15 +17,17 @@ export const createUser = async (user: CreateUserParams) => {
     const newUser = await users.create(
       ID.unique(),
       user.email,
-      user.phone,
-      user.name,
-      undefined
+      user.phone, // Replace with actual password
+      user.name
+      // If you don't have a required field, remove this or pass the correct value
     );
+    return parseStringify(newUser);
   } catch (error: any) {
     if (error && error.code === 409) {
       const documents = await users.list([Query.equal("email", [user.email])]);
       return documents?.users[0];
     }
+    throw new Error(error.message || "User creation failed"); // Add error handling for other cases
   }
 };
 
