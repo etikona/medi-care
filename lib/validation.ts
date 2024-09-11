@@ -11,6 +11,30 @@ export const UserFormValidation = z.object({
     .refine((phone) => /^\+\d{10,15}$/.test(phone), "Invalid phone number"),
 });
 
+// Password Validation
+const commonlyUsedPasswords = [
+  "123456",
+  "password",
+  "123456789",
+  "12345678",
+  "12345",
+  "1234567",
+  "1234567890",
+  "qwerty",
+  "abc123",
+  "football",
+  // Add more as required
+];
+
+const passwordSchema = z
+  .string()
+  .min(8, "Password must be at least 8 characters long")
+  .max(265, "Password must be less than or equal to 265 characters long")
+  .refine(
+    (val) => !commonlyUsedPasswords.includes(val),
+    "Password should not be one of the commonly used passwords"
+  );
+
 export const PatientFormValidation = z.object({
   name: z
     .string()
@@ -85,6 +109,7 @@ export const CreateAppointmentSchema = z.object({
     .max(500, "Reason must be at most 500 characters"),
   note: z.string().optional(),
   cancellationReason: z.string().optional(),
+  // userId removed because it should be managed in the backend or passed separately
 });
 
 export const ScheduleAppointmentSchema = z.object({

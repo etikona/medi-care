@@ -39,18 +39,38 @@ export const getAppointment = async (appointmentId: string) => {
   }
 };
 
+// ! Get Appointment
+
 export const getRecentAppointmentList = async () => {
   try {
+    // Fetch appointments without querying
     const appointments = await databases.listDocuments(
       DATABASE_ID!,
-      APPOINTMENT_COLLECTION_ID!,
-      [Query.orderDesc("$createdAt")]
+      APPOINTMENT_COLLECTION_ID!
     );
+
+    // Log the full response for debugging
+    console.log("Raw Appointments Data:", appointments);
+
+    // Check if appointments exist
+    if (!appointments.documents || appointments.documents.length === 0) {
+      console.error("No documents found in the appointment collection.");
+      return {
+        totalAppointments: 0,
+        scheduleCount: 0,
+        pendingCount: 0,
+        cancelCount: 0,
+        documents: [],
+      };
+    }
+
     const initialCounts = {
       scheduleCount: 0,
       pendingCount: 0,
       cancelCount: 0,
     };
+
+    // Count appointments based on status
     const counts = (appointments.documents as Appointment[]).reduce(
       (acc, appointment) => {
         if (appointment.status === "scheduled") {
@@ -64,15 +84,31 @@ export const getRecentAppointmentList = async () => {
       },
       initialCounts
     );
+
+    // Sort by date manually if $createdAt is unavailable in the query
+    const sortedDocuments = appointments.documents.sort((a, b) => {
+      const dateA = new Date(a.$createdAt || a.createdAt).getTime();
+      const dateB = new Date(b.$createdAt || b.createdAt).getTime();
+      return dateB - dateA;
+    });
+
     const data = {
-      initialCounts: appointments.total,
+      totalAppointments: appointments.total, // Total number of documents
       ...counts,
-      documents: appointments.documents,
+      documents: sortedDocuments, // Sorted documents by creation date
     };
 
-    return parseStringify(data);
+    console.log("Processed Appointment Data:", data);
+    return data;
   } catch (error) {
-    console.log(error);
+    console.error("Error fetching appointments:", error);
+    return {
+      totalAppointments: 0,
+      scheduleCount: 0,
+      pendingCount: 0,
+      cancelCount: 0,
+      documents: [],
+    }; // Return empty data in case of error
   }
 };
 

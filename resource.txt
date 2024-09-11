@@ -9,3 +9,6 @@
  8 Fix the identification number in database.
  9 Add a new attributes called treatment consent & discloser consent  in database.
  10 Git Commit = "Create new appointment page & form"
+
+ // Changes
+ 1 patient.action.ts file = getPatient -> query --> $userId to userId

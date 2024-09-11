@@ -45,7 +45,6 @@ const RegisterForm = ({ user }: { user: User }) => {
   const onSubmit = async (values: z.infer<typeof PatientFormValidation>) => {
     setIsLoading(true);
 
-    // Store file info in form data as
     let formData;
     if (
       values.identificationDocument &&
@@ -58,6 +57,12 @@ const RegisterForm = ({ user }: { user: User }) => {
       formData = new FormData();
       formData.append("blobFile", blobFile);
       formData.append("fileName", values.identificationDocument[0].name);
+
+      // Debugging: Log FormData content
+      console.log("FormData Content:");
+      formData.forEach((value, key) => {
+        console.log(`${key}:`, value);
+      });
     }
 
     try {
@@ -87,13 +92,16 @@ const RegisterForm = ({ user }: { user: User }) => {
         privacyConsent: values.privacyConsent,
       };
 
+      console.log("Patient Data:", patient);
+
       const newPatient = await registerPatient(patient);
+      console.log("Registered Patient:", newPatient);
 
       if (newPatient) {
         router.push(`/patients/${user.$id}/new-appointment`);
       }
     } catch (error) {
-      console.log(error);
+      console.log(error, "Failed to register patient");
     }
 
     setIsLoading(false);

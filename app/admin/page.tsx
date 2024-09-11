@@ -13,11 +13,12 @@ import { columns } from "@/components/table/columns";
 
 const Admin = async () => {
   const appointments = await getRecentAppointmentList();
-  console.table(appointments);
 
-  if (!appointments) {
-    return <div>Error loading appointments.</div>; // Handle case where appointments data is null or undefined
+  if (!appointments || appointments.documents.length === 0) {
+    return <div>Error loading appointments.</div>; // Handle the case where no appointments are found
   }
+
+  console.log("Appointments Data:", appointments);
 
   return (
     <div className="mx-auto flex max-w-7xl flex-col space-y-14">

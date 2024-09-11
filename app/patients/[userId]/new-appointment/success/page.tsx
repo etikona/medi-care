@@ -1,7 +1,8 @@
 import Image from "next/image";
 import Link from "next/link";
 import React from "react";
-import fullLogo from "@/public/assets/icons/logo-full.svg";
+import fullLogo from "@/public/assets/icons/medi_care_logo_transparent.png";
+
 import calender from "@/public/assets/icons/calendar.svg";
 import success from "@/public/assets/gifs/success.gif";
 import { getAppointment } from "@/lib/actions/appointment.actions";
@@ -22,7 +23,7 @@ const Success = async ({
   const user = await getUser(userId);
   Sentry.metrics.set("user_view-appointment-success", user.name);
   return (
-    <div className="flex h-screen max-h-screen px-[5%]">
+    <div className="flex h-screen max-h-screen px-[5%] align-center">
       <div>
         <Link href="/">
           <Image

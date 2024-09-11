@@ -1,44 +1,40 @@
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
+import Image from "next/image";
+import { useRouter } from "next/navigation";
+import { Dispatch, SetStateAction, useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
-import { Button } from "@/components/ui/button";
-import { Form } from "@/components/ui/form";
-import icon from "@/public/assets/icons/user.svg";
-import email from "@/public/assets/icons/email.svg";
-// import phone from "@/public/assets/icons/phone.svg";
-import CustomFormField from "../CustomFormField";
-import SubmitButton from "../SubmitButton";
-import { useState } from "react";
-import { getAppointmentSchema } from "@/lib/validation";
-import { useRouter } from "next/navigation";
-import { createUser } from "@/lib/actions/patient.actions";
-import { Link } from "lucide-react";
-import { FormFieldType } from "./PatientForm";
+
+import { SelectItem } from "@/components/ui/select";
 import { Doctors } from "@/constants";
-import { SelectItem } from "../ui/select";
-import Image from "next/image";
 import {
   createAppointment,
   updateAppointment,
 } from "@/lib/actions/appointment.actions";
+import { getAppointmentSchema } from "@/lib/validation";
 import { Appointment } from "@/types/appwrite.types";
-// import { error } from "console";
-// import CustomeFormField from "../CustomeFormField";
 
-const AppointmentForm = ({
+import "react-datepicker/dist/react-datepicker.css";
+
+import CustomFormField from "../CustomFormField";
+import SubmitButton from "../SubmitButton";
+import { Form } from "../ui/form";
+import { FormFieldType } from "./PatientForm";
+
+export const AppointmentForm = ({
   userId,
   patientId,
-  type,
+  type = "create",
   appointment,
   setOpen,
 }: {
   userId: string;
   patientId: string;
-  type: "create" | "cancel" | "schedule";
+  type: "create" | "schedule" | "cancel";
   appointment?: Appointment;
-  setOpen: (open: boolean) => void;
+  setOpen?: Dispatch<SetStateAction<boolean>>;
 }) => {
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
@@ -48,9 +44,9 @@ const AppointmentForm = ({
   const form = useForm<z.infer<typeof AppointmentFormValidation>>({
     resolver: zodResolver(AppointmentFormValidation),
     defaultValues: {
-      primaryPhysician: appointment ? appointment.primaryPhysician : "",
+      primaryPhysician: appointment ? appointment?.primaryPhysician : "",
       schedule: appointment
-        ? new Date(appointment.schedule)
+        ? new Date(appointment?.schedule!)
         : new Date(Date.now()),
       reason: appointment ? appointment.reason : "",
       note: appointment?.note || "",
@@ -62,7 +58,7 @@ const AppointmentForm = ({
     values: z.infer<typeof AppointmentFormValidation>
   ) => {
     setIsLoading(true);
-
+    console.log("Form submitted", values);
     let status;
     switch (type) {
       case "schedule":
@@ -88,7 +84,7 @@ const AppointmentForm = ({
         };
 
         const newAppointment = await createAppointment(appointment);
-
+        console.log(newAppointment);
         if (newAppointment) {
           form.reset();
           router.push(
@@ -109,7 +105,7 @@ const AppointmentForm = ({
         };
 
         const updatedAppointment = await updateAppointment(appointmentToUpdate);
-
+        console.log(updateAppointment);
         if (updatedAppointment) {
           setOpen && setOpen(false);
           form.reset();
@@ -126,24 +122,25 @@ const AppointmentForm = ({
     case "cancel":
       buttonLabel = "Cancel Appointment";
       break;
-    case "create":
-      buttonLabel = "Create Appointment";
     case "schedule":
       buttonLabel = "Schedule Appointment";
       break;
     default:
-      break;
+      buttonLabel = "Submit Appointment";
   }
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6 flex-1">
-        {type == "create" && (
+      <form onSubmit={form.handleSubmit(onSubmit)} className="flex-1 space-y-6">
+        {type === "create" && (
           <section className="mb-12 space-y-4">
             <h1 className="header">New Appointment</h1>
-            <p className="">Request new appointment in 10 seconds</p>
+            <p className="text-dark-700">
+              Request a new appointment in 10 seconds.
+            </p>
           </section>
         )}
+
         {type !== "cancel" && (
           <>
             <CustomFormField
@@ -153,63 +150,70 @@ const AppointmentForm = ({
               label="Doctor"
               placeholder="Select a doctor"
             >
-              {/* // ! Copy the constant file from git repo for loading all the doctors image */}
-              {/* // * {['Dr.John Doe', 'Dr.Johnathon', 'Dr.Martinez', 'Dr.Murphy']} */}
-              {Doctors.map((doctor) => (
-                //! key=doctor.name value=doctor.name
-                <SelectItem key={doctor?.name} value={doctor?.name}>
+              {Doctors.map((doctor, i) => (
+                <SelectItem key={doctor.name + i} value={doctor.name}>
                   <div className="flex cursor-pointer items-center gap-2">
                     <Image
-                      src={doctor?.image}
-                      height={32}
+                      src={doctor.image}
                       width={32}
-                      alt={doctor?.name}
+                      height={32}
+                      alt="doctor"
                       className="rounded-full border border-dark-500"
                     />
-                    <p>{doctor?.name}</p>
+                    <p>{doctor.name}</p>
                   </div>
                 </SelectItem>
               ))}
             </CustomFormField>
+
             <CustomFormField
               fieldType={FormFieldType.DATE_PICKER}
               control={form.control}
               name="schedule"
               label="Expected appointment date"
               showTimeSelect
-              dateFormat="MM/dd/yyyy-h:mm aa"
+              dateFormat="MM/dd/yyyy  -  h:mm aa"
             />
-            <div className="flex flex-col xl:flex-row gap-4">
+
+            <div
+              className={`flex flex-col gap-6  ${
+                type === "create" && "xl:flex-row"
+              }`}
+            >
               <CustomFormField
                 fieldType={FormFieldType.TEXTAREA}
                 control={form.control}
                 name="reason"
-                label="Reason for appointment"
-                placeholder="Enter reason for appointment"
+                label="Appointment reason"
+                placeholder="Annual montly check-up"
+                disabled={type === "schedule"}
               />
+
               <CustomFormField
                 fieldType={FormFieldType.TEXTAREA}
                 control={form.control}
                 name="note"
-                label="Notes"
-                placeholder="Enter notes"
+                label="Comments/notes"
+                placeholder="Prefer afternoon appointments, if possible"
+                disabled={type === "schedule"}
               />
             </div>
           </>
         )}
+
         {type === "cancel" && (
-          <>
-            <CustomFormField
-              fieldType={FormFieldType.TEXTAREA}
-              control={form.control}
-              name="cancellationReason"
-              label="Cancellation reason"
-              placeholder="Write the reason of your cancellation"
-            />
-          </>
+          <CustomFormField
+            fieldType={FormFieldType.TEXTAREA}
+            control={form.control}
+            name="cancellationReason"
+            label="Reason for cancellation"
+            placeholder="Urgent meeting came up"
+          />
         )}
+
         <SubmitButton
           isLoading={isLoading}
+          // typse="submit"
           className={`${
             type === "cancel" ? "shad-danger-btn" : "shad-primary-btn"
           } w-full`}
@@ -220,5 +224,3 @@ const AppointmentForm = ({
     </Form>
   );
 };
-
-export default AppointmentForm;
