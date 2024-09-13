@@ -13,7 +13,10 @@
   </div>
 
   <h3 align="center">A HealthCare Management System</h3>
-
+  <div align="center">
+  The Live link of Medi Care <a href="https://medi-care-olive.vercel.app/" target="_blank">
+    </div>
+</div>
 </div>
 
 ## 📋 <a name="table">Table of Contents</a>
